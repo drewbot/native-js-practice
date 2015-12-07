@@ -165,17 +165,24 @@ person.sayFavFoods();
 
 var addFoodButton = document.getElementById('add-food');
 var foodInput = document.getElementById('food-input');
-addFoodButton.onclick = function() {
+function addFood() {
   var favFoods = foodInput.value;
   person.favoriteFoods.push(favFoods);
+  foodInput.value = '';
+}
+addFoodButton.onclick = function() {
+  addFood()
+};
+foodInput.onkeydown = function(e) {
+  if (e.keyCode == 13) {
+    addFood()
+  }
 };
 var sayFavFoodButton = document.getElementById('say-fav-food');
 sayFavFoodButton.onclick = function() {
   person.sayFavFoods();
   person.favoriteFoodList = [];
-}
-
-
+};
 
 
 // take an array of person's properties, map over it and store the return value
