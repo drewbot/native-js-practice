@@ -11,10 +11,10 @@ function sayThing(thing) {
 
 sayThing('hello');
 
-// 1. 
+// 1.
 ['hello', 'hola', 'bonjour'].forEach(sayThing); // throws away return value
 
-// 2. 
+// 2.
 var things = ['hello', 'hola', 'bonjour'];
 things.forEach(sayThing);
 
@@ -37,6 +37,26 @@ var timesTwo = [1, 2, 3].map(function(item){
 
 console.log(timesTwo);
 
+// Illustrating how forEach will run multByTwo() for each item in an array
+function multByTwo(thing) {
+  var result = thing * 2;
+  console.log(result);
+  return result;
+}
+
+multByTwo(2);
+
+var numsToDouble = [1, 2, 3];
+
+numsToDouble.forEach(multByTwo);
+
+numsToDouble.forEach(function(thing) {
+  var result = thing * 2;
+  console.log(result);
+  return result;
+});
+
+// Illustrating that map will run the function once and return an array
 function doubled(items) {
   return items.map(function(item){
     return item * 2;
@@ -47,15 +67,20 @@ var doubleArray = [2, 4, 5, 6]
 
 console.log(doubled(doubleArray));
 
+// isVowel will return true if the charater passed as the arguement
+// does exist at any index of the vowel array
+// If it does not exist in the array, indexOf will return -1
+// and isVowel will return false
 function isVowel(char) {
   return ['a', 'e', 'i', 'o', 'u'].indexOf(char) != -1;
 }
 
 console.log(isVowel('a'));
+console.log(isVowel('b'));
 
 // translate function takes a string as an argument
 function translate(phrase) {
-  // split the phrase string by character (including space)
+  // split the phrase string by character (including space) into and array
   var letters = phrase.split('');
   // map over each letter and pass in each letter as the function parameter
   var translatedArray = letters.map(function(char){
@@ -80,17 +105,17 @@ console.log(translate("m i c k e y m o u s e"));
   filter
 */
 
-// Fiter an array by removing numbers greater than 5 and return a new array
+// Fiter an array by removing numbers greater than 4 and return a new array
 var filteredArray = [1, 2, 3, 4, 5].filter(function(item){// return true if I want the value in the output
   // return false if I don't
-  return item < 4;
+  return item <= 4;
 });
 
 console.log(filteredArray);
 
 /*
   Objects
-  
+
 */
 
 var name = "Jake Smith";
@@ -100,15 +125,58 @@ function sayHello(){
 }
 sayHello();
 
-var favoriteFoods = ['cheese', 'tacos'];
-
+////////////////////////////////////
 var person = {
-  name: "Jake Smith",
+  name: "John Cena",
   sayHello: function() {
     console.log("Hello, I'm " + person.name);
   },
-  favoriteFoods: ['cheese', 'tacos']
+  // commented these out because I added a click function below to add favorite foods
+  // favoriteFoods: ['cheese', 'tacos', 'taters'],
+  favoriteFoods: [],
+  favoriteFoodList: [],
+  saveFavFoods: function() {
+    for (var i = 0; i < person.favoriteFoods.length; i ++) {
+      if (person.favoriteFoods[i] == person.favoriteFoods[0]) {
+        person.favoriteFoodList.push(person.favoriteFoods[i]);
+      } else if (person.favoriteFoods[i] !== person.favoriteFoods[person.favoriteFoods.length-1]) {
+        person.favoriteFoodList.push(" " + person.favoriteFoods[i]);
+      } else if (person.favoriteFoods[i] == person.favoriteFoods[person.favoriteFoods.length-1]) {
+        person.favoriteFoodList.push(" and " + person.favoriteFoods[i]);
+      }
+    }
+  },
+  sayFavFoods: function() {
+    person.saveFavFoods();
+    if (typeof person.favoriteFoodList !== 'undefined' && person.favoriteFoodList.length > 0) {
+      if (person.favoriteFoodList.length == 1) {
+        console.log("My favorite food is " + person.favoriteFoodList.join());
+      } else {
+        console.log("My favorite foods are " + person.favoriteFoodList.join());
+      }
+    } else {
+      console.log('I dont have a favorite food');
+    }
+  }
 };
+
+person.sayHello();
+person.sayFavFoods();
+
+var addFoodButton = document.getElementById('add-food');
+var foodInput = document.getElementById('food-input');
+addFoodButton.onclick = function() {
+  var favFoods = foodInput.value;
+  person.favoriteFoods.push(favFoods);
+};
+var sayFavFoodButton = document.getElementById('say-fav-food');
+sayFavFoodButton.onclick = function() {
+  person.sayFavFoods();
+  person.favoriteFoodList = [];
+}
+
+
+
 
 // take an array of person's properties, map over it and store the return value
 var personProperties = ['name', 'favoriteFoods'].map(function(prop){
@@ -124,17 +192,29 @@ var personProperties = ['name', 'favoriteFoods'].map(function(prop){
 
 console.log(personProperties);
 
+// map an array of objects
 var people = [
   {name: "Jake", role: "Instructor"},
   {name: "Roy", role: "Resident Cool Guy"}
 ];
 
 var peopleNames = people.map(function(person) {
-  return person.name;
+  return person.name + " the " + person.role;
 });
 
 console.log(peopleNames);
 
+///////////////////////////////////////////////////////////////////////////////?
+var srcArray = [1,2,3,4]
+var destArray = []
+
+srcArray.reduce(function(v,x,y,z) {
+destArray.push(v,x);
+return v + x;
+});
+
+console.log(destArray);
+///////////////////////////////////////////////////////////////////////////////?
 
 var slaying = true
 var youHit = Math.floor(Math.random() * 2)
@@ -154,9 +234,8 @@ while (slaying){
     } else {
         console.log("Gotcha bish");
         slaying = false;
-    } 
+    }
 }
-
 
 // Another Do While
 var bool = true;
@@ -168,11 +247,11 @@ do {
 // Is it even?
 var isEven = function(number) {
   if (number % 2 === 0) {
-    return true;  
+    return true;
   } else if (isNaN(number)) {
         return "That's nat a number, silly"
   } else {
-    return false;    
+    return false;
   }
 };
 
@@ -220,7 +299,7 @@ function getReview(movie){
             break;
         default:
             return "I don't know!";
-    };    
+    };
 };
 
 getReview("Finding Nemo");
@@ -242,7 +321,7 @@ for (var i = 0; i < color.length; i++) {
             console.log('yella is hella cool');
             break;
         default:
-            console.log(color[i] + "... that's... cool");   
+            console.log(color[i] + "... that's... cool");
     }
 }
 
@@ -274,7 +353,7 @@ console.log(flattened);
 
 [0, 1, 2, 3, 4].reduce(function(previousValue, currentValue, index, array) {
   return previousValue + currentValue;
-}, 10); 
+}, 10);
 // returns 20
 // 10 + 0 = 10
 // 10 + 1 = 11
@@ -292,7 +371,7 @@ console.log(a.join(', '));
 console.log(a.join(' + '));
 
 // map
-// This takes an array of numbers and creates a new array 
+// This takes an array of numbers and creates a new array
 // containing the square roots of the numbers in the first array
 var numbers = [1, 4, 9];
 var roots = numbers.map(Math.sqrt);
@@ -337,7 +416,7 @@ splitString(tempestString, space);
 splitString(tempestString);
 splitString(monthString, comma);
 
-// 
+//
 var myString = 'Hello World. How are you doing?';
 var splits = myString.split(' ', 3);
 
@@ -362,8 +441,8 @@ var friends = {
 
 var list = function(obj) {
     for(var key in obj) {
-        console.log(key);   
-    };    
+        console.log(key);
+    };
 };
 
 list(friends);
@@ -379,7 +458,7 @@ var search = function(name) {
 
 search("Steve");
 
-// FizzBuzz test 
+// FizzBuzz test
 var myArray = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
 
 var fizzFilter = function(numSet){
@@ -413,7 +492,7 @@ bob.setAge = setAge;
 bob.setAge(35);
 
 
-// This effectively does the same as above 
+// This effectively does the same as above
 // but the setAge function only applies to the bob object here
 var bob = {
   age: 30,
@@ -425,7 +504,7 @@ var bob = {
 bob.setAge(35);
 
 console.log(bob.age);
-  
+
 // make susan here, and first give her an age of 25
 var susan = {
     age: 25,
@@ -449,7 +528,7 @@ rectangle.setHeight = function (newHeight) {
 rectangle.setWidth = function(newWidth) {
     this.width = newWidth;
 };
-  
+
 // here change the width to 8 and height to 6 using our new methods
 rectangle.setHeight(6);
 rectangle.setWidth(8);
@@ -469,7 +548,7 @@ console.log("The perimeter of the rectangle is" + " " + rectangle.findPerimeter(
 console.log("The area of the rectangle is" + " " + rectangle.findArea() + " " + "square units.");
 
 
-// 
+//
 // Person constructor
 function Person(name,age) {
   this.name = name;
@@ -492,7 +571,7 @@ function Rectangle(height, width) {
   };
   // put our perimeter function here!
   this.calcPerimeter = function(){
-    return (this.height * 2) + (this.width * 2);    
+    return (this.height * 2) + (this.width * 2);
   }
 }
 
@@ -543,7 +622,7 @@ family[3] = new Person("timmy", 6);
 // loop through our new array
 for (var i = 0; i < family.length; i++) {
     var thisPerson = family[i];
-    console.log(thisPerson.name);    
+    console.log(thisPerson.name);
 }
 
 
@@ -588,7 +667,7 @@ var olderAge = function(obj1, obj2){
     if (obj1.age > obj2.age) {
         return obj1.age;
     } else {
-        return obj2.age;    
+        return obj2.age;
     }
 };
 
@@ -607,7 +686,7 @@ snoopy.age = 10;
 // save Snoopy's age and species into variables
 // use dot notation for snoopy's species
 var species = snoopy.species;
-    
+
 // use bracket notation for snoopy's age
 var age = snoopy["age"];
 
@@ -617,12 +696,12 @@ function Circle (radius) {
     this.radius = radius;
     this.area = function () {
         return Math.PI * this.radius * this.radius;
-        
+
     };
     // define a perimeter method here
     this.perimeter = function(){
         return 2 * (Math.PI * this.radius);
-    }    
+    }
 };
 
 
@@ -806,8 +885,8 @@ peng1.sayName();
 console.log(peng1.numLegs);
 
 
-// if a property is not defined for a class, 
-// this class's prototype chain will be traversed upwards 
+// if a property is not defined for a class,
+// this class's prototype chain will be traversed upwards
 // until a property is found (or not) in a parent (higher) class.
 // All the way up to the object prototype Object()
 function Animal(name, numLegs) {
@@ -835,7 +914,7 @@ console.log( myEmperor.numLegs ); // should print 2
 console.log( myEmperor.isAlive ); // should print true
 
 
-// Storing a variable inside a class (prototype or constructor) 
+// Storing a variable inside a class (prototype or constructor)
 // limits access to said variable to only within the class or a class instance
 function Person(first,last,age) {
    this.firstname = first;
@@ -869,11 +948,11 @@ function AnotherPerson(first,last,age) {
    var returnBalance = function() {
       return bankBalance;
    };
-       
+
    // create the new public method
    this.askTeller = function(){
        // return the method itself and NOT the result of calling the method
-        return returnBalance   
+        return returnBalance
     }
 }
 
@@ -892,7 +971,7 @@ function OtraPersona(first,last,age) {
    this.lastname = last;
    this.age = age;
    var bankBalance = 100000;
-  
+
    this.askTeller = function(pass) {
      if (pass == 1234) return bankBalance;
      else return "Wrong password.";
@@ -935,21 +1014,21 @@ console.log(hasOwn);
 // Cash Register
 var cashRegister = {
     total: 0,
-//insert the add method here    
+//insert the add method here
     add: function(itemCost){
         this.total += itemCost;
     },
-    
+
     scan: function (item) {
-        switch (item) { 
-        case "eggs": 
-            this.add(0.98); 
+        switch (item) {
+        case "eggs":
+            this.add(0.98);
             break;
-        
-        case "milk": 
-            this.add(1.23); 
+
+        case "milk":
+            this.add(1.23);
             break;
-        
+
         //Add other 2 items here
         case "magazine":
             this.add(4.99);
@@ -1021,7 +1100,7 @@ var cashRegister = {
     voidLastTransaction: function(){
         this.total -= this.lastTransactionAmount;
     }
-    
+
 };
 
 cashRegister.scan('eggs',1);
@@ -1076,13 +1155,13 @@ var cashRegister = {
     applyStaffDiscount : function(employee){
         this.total -= this.total * (employee.discountPercent / 100);
     }
-    
+
 };
 
 cashRegister.scan('eggs',1);
 cashRegister.scan('milk',1);
 cashRegister.scan('magazine',3);
-// Apply your staff discount by passing the 'me' object 
+// Apply your staff discount by passing the 'me' object
 // to applyStaffDiscount
 cashRegister.applyStaffDiscount(me);
 
@@ -1092,7 +1171,7 @@ console.log('Your bill is '+cashRegister.total.toFixed(2));
 
 
 // LinkedIn interview question
-// Create a function that accepts a word 
+// Create a function that accepts a word
 // and returns true if the word entered is a palindrome
 // returns false if it's not
 function isPalindrome(word){
@@ -1104,10 +1183,10 @@ function isPalindrome(word){
     for (var i = 0; i < arraySize / 2; i++){
         // if current index in loop doesn't equal the index at the opposite end of the array
         // length of array is one more than the number of actual contents because of index starting with 0
-        // 
+        //
         if (wordArray[i] !== wordArray[(arraySize - i) - 1]){
-            return false 
-        } 
+            return false
+        }
     }
     return true
 }
